@@ -1,0 +1,25 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this template
+*/
+/* 
+    Created on : 23 de out. de 2024, 16:38:31
+    Author     : 178318
+*/
+
+body {
+    background: no-repeat center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover
+}
+
+.caixa {
+    background: rgba(230,230,230,0.8);
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 30px 15px;
+    border-radius: 3px
+}
+
