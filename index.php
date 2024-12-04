@@ -82,7 +82,7 @@ try {
             // body content
             $tagComment = new tagHtml;
             $tagComment->setTag("p");
-            $tagComment->setValue($pcomment);
+            $tagComment->setValue(nl2br($pcomment));
 
             $body_content = $tagComment->mount();
 
@@ -223,14 +223,38 @@ try {
                     <div class="mb-3">
                         <label for="owner" class="form-label">Owner of the post:</label>
                         <select name="owner" id="owner" class="form-select">
-                            <option value="">Select a user</option>
                             <?php echo $html_users; ?>
                         </select>               
                     </div>
-                    <button type="submit" class="btn btn-outline-primary">Create Post</button>
+                    <button type="submit" class="btn btn-outline-primary" id="btn-createpost">Create Post</button>
                 </form>
             </div>
         </div>
     </div>
+    <script>
+
+        let title = document.getElementById("title");
+        let comment = document.getElementById("comment");
+        let owner_select = document.getElementById("owner");
+        let btn = document.getElementById("btn-createpost");
+        
+        let options = owner_select.children
+
+        let unknownOption = "<option value=\"\">Unknown</option>";
+
+        if (options.length >= 1) {
+            console.log("wee");
+        } else {
+            owner_select.innerHTML = unknownOption;
+            owner_select.setAttribute("disabled","");
+
+            title.setAttribute("disabled","");
+            comment.setAttribute("disabled","");
+            btn.setAttribute("disabled","");
+
+            btn.remove();
+        }
+
+    </script>
 </body>
 </html>
