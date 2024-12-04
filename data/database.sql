@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS `socialchat`;
 CREATE DATABASE `socialchat`;
 
 USE `socialchat`;
@@ -12,5 +13,5 @@ CREATE TABLE `post`(
     `title` VARCHAR(50) NOT NULL,
     `comment` VARCHAR(200) NOT NULL,
     `owner` INT NOT NULL,
-    FOREIGN KEY (`owner`) REFERENCES `user`(`id`)
+    FOREIGN KEY (`owner`) REFERENCES `user`(`id`) ON DELETE CASCADE
 );
