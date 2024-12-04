@@ -5,6 +5,12 @@ include "modules/taghtml.php";
 
 $conn = new Connection;
 
+if (isset($_GET['deluser'])) {
+    $userid = $_GET['deluser'];
+
+    echo $userid;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     try {
         $username = $_POST['username'];
@@ -36,24 +42,87 @@ try {
 
         foreach ($list as $key => $value) {
             $pid = new tagHtml;
-            $pid->setTag("p");
-            $pid->addAtribute("class","col");
+            $pid->setTag("td");
             $pid->setValue($value['id']);
 
             $pname = new tagHtml;
-            $pname->setTag("p");
-            $pname->addAtribute("class","col");
+            $pname->setTag("td");
             $pname->setValue($value['name']);
 
-            $joint = $pid->mount() . $pname->mount();
+            // delete form
+            $phidden = new tagHtml;
+            $phidden->setTag("input", true);
+            $phidden->addAtribute("type","hidden");
+            $phidden->addAtribute("name","deluser");
+            $phidden->addAtribute("value",$value['id']);
 
+            $pbutton = new tagHtml;
+            $pbutton->setTag("button");
+            $pbutton->addAtribute("type","submit");
+            $pbutton->addAtribute("class","btn btn-sm btn-outline-danger");
+            $pbutton->setValue("Delete");
+
+            $formjoint = $phidden->mount() . $pbutton->mount();
+
+            $pform = new tagHtml;
+            $pform->setTag("form");
+            $pform->addAtribute("action","users.php");
+            $pform->addAtribute("method","get");
+            $pform->setValue($formjoint);
+
+            $pdelete = new tagHtml;
+            $pdelete->setTag("td");
+            $pdelete->setValue($pform->mount());
+
+            // joint
+            $joint = $pid->mount() . $pname->mount() . $pdelete->mount();
+
+            // table line
             $profile = new tagHtml;
-            $profile->setTag("div");
-            $profile->addAtribute("class","row");
+            $profile->setTag("tr");
             $profile->setValue($joint);
 
             $html_users .= $profile->mount();
         }
+
+        // table > thead
+        $thId = new tagHtml;
+        $thId->setTag("th");
+        $thId->setValue("Id");
+
+        $thUsername = new tagHtml;
+        $thUsername->setTag("th");
+        $thUsername->setValue("Username");
+
+        $thState = new tagHtml;
+        $thState->setTag("th");
+        $thState->setValue("State");
+
+        $thJoint = $thId->mount() . $thUsername->mount() . $thState->mount();
+
+        $trhead = new tagHtml;
+        $trhead->setTag("tr");
+        $trhead->setValue($thJoint);
+
+        $tablehead = new tagHtml;
+        $tablehead->setTag("thead");
+        $tablehead->setValue($trhead->mount());
+
+        // table > tbody
+        $tablebody = new tagHtml;
+        $tablebody->setTag("tbody");
+        $tablebody->setValue($html_users);
+
+        // table > content
+        $tablecontent = $tablehead->mount() . $tablebody->mount();
+
+        // table
+        $tagTable = new tagHtml;
+        $tagTable->setTag("table");
+        $tagTable->setValue($tablecontent);
+        $tagTable->addAtribute("class","table table-hover");
+        
+        $html_users = $tagTable->mount();
     }
 
 } catch (PDOException $e) {

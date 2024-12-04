@@ -10,6 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $comment = $_POST['comment'];
     $owner = $_POST['owner'];
 
+    if (!is_int($owner)) {
+        header("location:index.php");
+        exit;
+    }
+
     $sql = "INSERT INTO `post`(title, comment, owner) VALUES (:title, :comment, :owner)";
     $stmt = $conn->getConnection()->prepare($sql);
 
@@ -42,39 +47,87 @@ try {
             $pcomment = $value['comment'];
             $powner = $value['owner'];
             
-            $tagOwner = new tagHtml;
-            $tagOwner->setTag("p");
-            $tagOwner->setValue("owner: " . $powner);
-
-            $tagTitle = new tagHtml;
-            $tagTitle->setTag("p");
-            $tagTitle->addAtribute("class","h5");
-            $tagTitle->setValue($ptitle);
-
-            $tagComment = new tagHtml;
-            $tagComment->setTag("p");
-            $tagComment->setValue($pcomment);
-
+            // essential
             $tagHidden = new tagHtml;
             $tagHidden->setTag("input", true);
             $tagHidden->addAtribute("type","hidden");
             $tagHidden->addAtribute("name","id");
             $tagHidden->addAtribute("value",$pid);
 
+            // header content
+            $tagTitle = new tagHtml;
+            $tagTitle->setTag("p");
+            $tagTitle->addAtribute("class","h5");
+            $tagTitle->setValue($ptitle);
+
+            $header_content = $tagTitle->mount();
+
+            // body content
+            $tagComment = new tagHtml;
+            $tagComment->setTag("p");
+            $tagComment->setValue($pcomment);
+
+            $body_content = $tagComment->mount();
+
+            // footer content
+            $labelOwner = new tagHtml;
+            $labelOwner->setTag("label");
+            $labelOwner->setValue($powner);
+
+            // hack to display corrected: "created by @username"
+            // without hack: "created by@username"
+            $credits =  "Created by " . $labelOwner->mount();
+
+            $columnFirst = new tagHtml;
+            $columnFirst->setTag("div");
+            $columnFirst->addAtribute("class","col");
+            $columnFirst->setValue($credits);
+
             $tagButton = new tagHtml;
             $tagButton->setTag("button");
             $tagButton->addAtribute("type","submit");
-            $tagButton->setValue("Get");
+            $tagButton->addAtribute("class","col btn btn-outline-info btn-block");
+            $tagButton->setValue("Information");
 
-            $all = $tagOwner->mount() . $tagTitle->mount() . $tagComment->mount() . $tagHidden->mount() . $tagButton->mount();
+            $lineCredits = $columnFirst->mount() . $tagButton->mount();
 
+            $tableHorizontal = new tagHtml;
+            $tableHorizontal->setTag("div");
+            $tableHorizontal->addAtribute("class","row");
+            $tableHorizontal->setValue($lineCredits);
+
+            $footer_content = $tableHorizontal->mount();
+
+            // card construction
+            $card_header = new tagHtml;
+            $card_header->setTag("div");
+            $card_header->addAtribute("class","card-header");
+            
+            $card_body = new tagHtml;
+            $card_body->setTag("div");
+            $card_body->addAtribute("class","card-body");
+            
+            $card_footer = new tagHtml;
+            $card_footer->setTag("div");
+            $card_footer->addAtribute("class","card-footer");
+            
+            // card content
+            $card_header->setValue($header_content);
+            $card_body->setValue($body_content);
+            $card_footer->setValue($footer_content);
+
+            // card mounted
+            $card = $card_header->mount() . $card_body->mount() . $card_footer->mount();
+
+            // form
             $post = new tagHtml;
             $post->setTag("form");
             $post->addAtribute("action","index.php");
             $post->addAtribute("method","get");
-            $post->setValue($all);
+            $post->addAtribute("class","card mb-5");
+            $post->setValue($tagHidden->mount() . $card);
             
-            $html_posts .= $post->mount();
+            $html_posts = $post->mount() . $html_posts;
         }
     }
 
@@ -135,22 +188,6 @@ try {
             <div class="col border p-3">
                 <p class="h4">View Posts</p>
                 <div class="container p-3">
-                    <div class="card">
-                        <div class="card-header ">
-                            <p class="h5">Titulo do post</p>
-                        </div>
-                        <div class="card-body">
-                            <p>Descrição do post</p>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row">
-                                <div class="col">
-                                    <label>Created by</label> <label>Tsukin</label>
-                                </div>
-                                <button type="submit" class="btn col btn-outline-info btn-block">Information</button>
-                            </div>
-                        </div>
-                    </div>
                     <?php echo $html_posts; ?>
                 </div>
             </div>
