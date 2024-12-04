@@ -6,9 +6,21 @@ include "modules/taghtml.php";
 $conn = new Connection;
 
 if (isset($_GET['deluser'])) {
-    $userid = $_GET['deluser'];
-
-    echo $userid;
+    try {
+        $userid = $_GET['deluser'];
+    
+        $sql = "DELETE FROM `user` WHERE `user`.`id`=?";
+        $stmt = $conn->getConnection()->prepare($sql);
+    
+        $stmt->bindValue(1,$userid);
+    
+        $stmt->execute();
+    
+        header("location:users.php");
+        exit;
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -31,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 $html_users = "";
 
+// get users
 try {
     $sql = "SELECT * FROM user";
     $stmt = $conn->getConnection()->prepare($sql);

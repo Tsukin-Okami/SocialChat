@@ -5,12 +5,29 @@ include "modules/taghtml.php";
 
 $conn = new Connection;
 
+if (isset($_GET['delpost'])) {
+    try {
+        $postid = $_GET['delpost'];
+
+        $sql = "DELETE FROM `post` WHERE `post`.`id`=?";
+        $stmt = $conn->getConnection()->prepare($sql);
+
+        $stmt->bindValue(1,$postid);
+        $stmt->execute();
+
+        header("location:index.php");
+        exit;
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $title = $_POST['title'];
     $comment = $_POST['comment'];
     $owner = $_POST['owner'];
 
-    if (!is_int($owner)) {
+    if (!isset($owner) || $owner == "") {
         header("location:index.php");
         exit;
     }
@@ -33,7 +50,7 @@ $html_users = "";
 
 // get posts
 try {
-    $sql = "SELECT * FROM post";
+    $sql = "SELECT `post`.`id`, `post`.`title`, `post`.`comment`, `user`.`name` FROM `post` INNER JOIN `user` ON `post`.`owner`=`user`.`id`";
     $stmt = $conn->getConnection()->prepare($sql);
 
     $stmt->execute();
@@ -45,13 +62,13 @@ try {
             $pid = $value['id'];
             $ptitle = $value['title'];
             $pcomment = $value['comment'];
-            $powner = $value['owner'];
+            $powner = $value['name'];
             
             // essential
             $tagHidden = new tagHtml;
             $tagHidden->setTag("input", true);
             $tagHidden->addAtribute("type","hidden");
-            $tagHidden->addAtribute("name","id");
+            $tagHidden->addAtribute("name","delpost");
             $tagHidden->addAtribute("value",$pid);
 
             // header content
@@ -72,6 +89,7 @@ try {
             // footer content
             $labelOwner = new tagHtml;
             $labelOwner->setTag("label");
+            $labelOwner->addAtribute("class","text-primary");
             $labelOwner->setValue($powner);
 
             // hack to display corrected: "created by @username"
@@ -86,8 +104,8 @@ try {
             $tagButton = new tagHtml;
             $tagButton->setTag("button");
             $tagButton->addAtribute("type","submit");
-            $tagButton->addAtribute("class","col btn btn-outline-info btn-block");
-            $tagButton->setValue("Information");
+            $tagButton->addAtribute("class","col btn btn-outline-danger btn-block");
+            $tagButton->setValue("Delete");
 
             $lineCredits = $columnFirst->mount() . $tagButton->mount();
 
