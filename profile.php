@@ -126,6 +126,10 @@ try {
                 <p id="field_bio">...</p>
             </div>
         </div>
+        <form action="./<?php echo $userid; ?>/edit" method="post" class="clearfix">
+            <input type="hidden" name="id">
+            <button type="submit" class="float-end btn btn-outline-primary">Edit Profile</button>
+        </form>
     </div>
     <div class="container mt-5 p-3 shadow bg-white col">
         <p class="h3 border-bottom">User posts</p>
