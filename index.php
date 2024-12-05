@@ -50,7 +50,10 @@ $html_users = "";
 
 // get posts
 try {
-    $sql = "SELECT `post`.`id`, `post`.`title`, `post`.`comment`, `user`.`name` FROM `post` INNER JOIN `user` ON `post`.`owner`=`user`.`id`";
+    $sql = "SELECT `post`.`id`, `post`.`title`, `post`.`comment`, `user`.`name` AS 'username', `user`.`id` AS 'userid' FROM `post` 
+    INNER JOIN `user` ON `post`.`owner`=`user`.`id` 
+    ORDER BY `post`.`id` DESC";
+
     $stmt = $conn->getConnection()->prepare($sql);
 
     $stmt->execute();
@@ -59,38 +62,40 @@ try {
         $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($posts as $key => $value) {
-            $pid = $value['id'];
-            $ptitle = $value['title'];
-            $pcomment = $value['comment'];
-            $powner = $value['name'];
-            
+            $p_id = $value['id']; // post id
+            $p_title = $value['title']; // post title
+            $p_comment = $value['comment']; // post comment
+            $p_username = $value['username']; // post user name
+            $p_userid = $value['userid']; // post user id
+
             // essential
             $tagHidden = new tagHtml;
             $tagHidden->setTag("input", true);
             $tagHidden->addAtribute("type","hidden");
             $tagHidden->addAtribute("name","delpost");
-            $tagHidden->addAtribute("value",$pid);
+            $tagHidden->addAtribute("value",$p_id);
 
             // header content
             $tagTitle = new tagHtml;
             $tagTitle->setTag("p");
             $tagTitle->addAtribute("class","h5");
-            $tagTitle->setValue($ptitle);
+            $tagTitle->setValue($p_title);
 
             $header_content = $tagTitle->mount();
 
             // body content
             $tagComment = new tagHtml;
             $tagComment->setTag("p");
-            $tagComment->setValue(nl2br($pcomment));
+            $tagComment->setValue(nl2br($p_comment));
 
             $body_content = $tagComment->mount();
 
             // footer content
             $labelOwner = new tagHtml;
-            $labelOwner->setTag("label");
+            $labelOwner->setTag("a");
             $labelOwner->addAtribute("class","text-primary");
-            $labelOwner->setValue($powner);
+            $labelOwner->addAtribute("href","./user/" . $p_userid);
+            $labelOwner->setValue($p_username);
 
             // hack to display corrected: "created by @username"
             // without hack: "created by@username"
@@ -145,7 +150,7 @@ try {
             $post->addAtribute("class","card mb-5");
             $post->setValue($tagHidden->mount() . $card);
             
-            $html_posts = $post->mount() . $html_posts;
+            $html_posts .= $post->mount();
         }
     }
 
@@ -185,7 +190,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Chat</title>
-    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-primary navbar-dark justify-content-center">
@@ -206,6 +211,7 @@ try {
             <div class="col border p-3">
                 <p class="h4">View Posts</p>
                 <div class="container p-3">
+                    <a href=""></a>
                     <?php echo $html_posts; ?>
                 </div>
             </div>

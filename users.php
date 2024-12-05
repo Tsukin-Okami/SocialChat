@@ -72,7 +72,7 @@ try {
             $pbutton = new tagHtml;
             $pbutton->setTag("button");
             $pbutton->addAtribute("type","submit");
-            $pbutton->addAtribute("class","btn btn-sm btn-outline-danger");
+            $pbutton->addAtribute("class","btn btn-sm btn-outline-danger btn-block");
             $pbutton->setValue("Delete");
 
             $formjoint = $phidden->mount() . $pbutton->mount();
@@ -81,11 +81,21 @@ try {
             $pform->setTag("form");
             $pform->addAtribute("action","users.php");
             $pform->addAtribute("method","get");
+            $pform->addAtribute("class","col d-grid");
             $pform->setValue($formjoint);
+
+            $plink = new tagHtml;
+            $plink->setTag("a");
+            $plink->addAtribute("class","col btn btn-sm btn-outline-success btn-block");
+            $plink->addAtribute("href","./user/" . $value['id']);
+            $plink->setValue("Profile");
+
+            $prow = $pform->mount(). $plink->mount();
 
             $pdelete = new tagHtml;
             $pdelete->setTag("td");
-            $pdelete->setValue($pform->mount());
+            $pdelete->addAtribute("class","row");
+            $pdelete->setValue($prow);
 
             // joint
             $joint = $pid->mount() . $pname->mount() . $pdelete->mount();
@@ -150,7 +160,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users - Social Chat</title>
-    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-primary navbar-dark justify-content-center">

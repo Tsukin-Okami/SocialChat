@@ -1,0 +1,6 @@
+RewriteEngine On
+
+## utiliza o sistema de banco de dados junto com o url
+# site/user/(id) - site/profile.php?id=(id)
+# site/user/3 - site/profile.php?id=3
+RewriteRule ^user/([0-9]+)$ profile.php?id=$1 [L]
