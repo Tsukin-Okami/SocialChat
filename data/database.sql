@@ -5,7 +5,8 @@ USE `socialchat`;
 
 CREATE TABLE `user`(
     `id` INT PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(50) NOT NULL
+    `name` VARCHAR(50) NOT NULL,
+    `bio` VARCHAR(200)
 );
 
 CREATE TABLE `post`(

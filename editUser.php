@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && (isset($_POST['bio']))) {
     $field_bio = $_POST['bio'];
 
     try {
-        $sql = "";
+        $sql = "UPDATE `user` SET `bio` = ':bio' WHERE `user`.`id` = 5; ";
 
         // TODO: enviar para o banco de dados as novas informacoes do usuario
 
