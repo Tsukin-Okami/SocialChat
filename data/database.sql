@@ -1,18 +1,19 @@
 DROP DATABASE IF EXISTS `socialchat`;
-CREATE DATABASE `socialchat`;
+
+CREATE DATABASE `socialchat` DEFAULT CHARSET = utf8mb4 DEFAULT COLLATE = utf8mb4_unicode_ci;
 
 USE `socialchat`;
 
 CREATE TABLE `user`(
-    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `id` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     `bio` VARCHAR(200)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `post`(
-    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `id` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     `title` VARCHAR(50) NOT NULL,
     `comment` VARCHAR(200) NOT NULL,
     `owner` INT NOT NULL,
     FOREIGN KEY (`owner`) REFERENCES `user`(`id`) ON DELETE CASCADE
-);
+) ENGINE=InnoDB;

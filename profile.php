@@ -114,27 +114,31 @@ try {
             </li>
         </ul>
     </nav>
-    <div class="container mt-5 p-3 shadow bg-white col">
-        <p class="h3 border-bottom">Profile</p>
-        <div class="container p-3">
-            <div class="container mb-3 row">
-                <p class="col" id="field_username">Username</p>
-                <p class="col" id="field_id">Id</p>
-            </div> 
-            <p class="h5 border-bottom">Biography</p>   
-            <div class="container">
-                <p id="field_bio">...</p>
+    <div class="container-fluid mt-5">
+        <div class="px-5 gap-5 row">
+            <div class="container border rounded p-3 shadow bg-white col">
+                <p class="h3 border-bottom">Profile</p>
+                <div class="container p-3">
+                    <div class="container mb-3 row">
+                        <p class="col" id="field_username">Username</p>
+                        <p class="col" id="field_id">Id</p>
+                    </div> 
+                    <p class="h5 border-bottom">Biography</p>   
+                    <div class="container">
+                        <p id="field_bio">...</p>
+                    </div>
+                </div>
+                <form action="./<?php echo $userid; ?>/edit" method="post" class="clearfix">
+                    <input type="hidden" name="id">
+                    <button type="submit" class="float-end btn btn-outline-primary">Edit Profile</button>
+                </form>
             </div>
-        </div>
-        <form action="./<?php echo $userid; ?>/edit" method="post" class="clearfix">
-            <input type="hidden" name="id">
-            <button type="submit" class="float-end btn btn-outline-primary">Edit Profile</button>
-        </form>
-    </div>
-    <div class="container mt-5 p-3 shadow bg-white col">
-        <p class="h3 border-bottom">User posts</p>
-        <div class="container p-3">
-            <?php echo $user_posts; ?>
+            <div class="container border rounded p-3 shadow bg-white col">
+                <p class="h3 border-bottom">User posts</p>
+                <div class="container p-3">
+                    <?php echo $user_posts; ?>
+                </div>
+            </div>
         </div>
     </div>
     <script>

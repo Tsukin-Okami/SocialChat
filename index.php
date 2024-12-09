@@ -192,8 +192,8 @@ try {
     <title>Social Chat</title>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 </head>
-<body>
-    <nav class="navbar navbar-expand-sm bg-primary navbar-dark justify-content-center">
+<body class="">
+    <nav class="navbar border-bottom shadow navbar-expand-sm bg-primary navbar-dark justify-content-center">
         <div class="container-fluid">
             <a href="index.php" class="navbar-brand">Social Chat</a>
         </div>
@@ -206,16 +206,16 @@ try {
             </li>
         </ul>
     </nav>
-    <div class="container mt-5 shadow bg-white">
+    <div class="container mt-5 shadow-lg rounded bg-white">
         <div class="row">
-            <div class="col border p-3">
+            <div class="col rounded-start border p-3">
                 <p class="h4">View Posts</p>
                 <div class="container p-3">
                     <a href=""></a>
                     <?php echo $html_posts; ?>
                 </div>
             </div>
-            <div class="col bg-light p-3">
+            <div class="col rounded-end bg-light p-3">
                 <p class="h4">Create Post</p>
                 <form action="index.php" method="post" class="was-validated">
                     <div class="mt-3 mb-3">

@@ -14,11 +14,19 @@ if (isset($_GET['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" && (isset($_POST['bio']))) {
     $field_bio = $_POST['bio'];
+    $field_username = $_POST['username'];
 
     try {
-        $sql = "UPDATE `user` SET `bio` = ':bio' WHERE `user`.`id` = 5; ";
+        $sql = "UPDATE `user` SET `bio`=:bio, `name`=:username WHERE `user`.`id`=:user";
 
         // TODO: enviar para o banco de dados as novas informacoes do usuario
+        $stmt = $conn->getConnection()->prepare($sql);
+
+        $stmt->bindParam("user",$userid);
+        $stmt->bindParam("bio",$field_bio);
+        $stmt->bindParam("username",$field_username);
+
+        $stmt->execute();
 
         header("location:.././" .$userid);
         exit;

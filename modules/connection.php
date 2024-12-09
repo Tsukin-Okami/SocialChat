@@ -8,7 +8,7 @@ class Connection
     {
         if (!isset($instance)) {
             try {
-                self::$instance = new PDO("mysql:host=localhost;dbname=socialchat", "root", "");
+                self::$instance = new PDO("mysql:host=localhost;dbname=socialchat;charset=utf8mb4", "root", "");
                 self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 die("Erro ao conectar: " . $e->getMessage());
